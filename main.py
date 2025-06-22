@@ -61,6 +61,12 @@ async def on_message(message: discord.Message):
 	if message.author.id == 431978032094380043 and b <= 0.05:
 		await message.channel.send("SHUT THE FUCK UP I HATE YOU!! GOD")
 
+@client.tree.command()
+async def echo(interaction:discord.Interaction,text:str):
+	"""Possess APOR!"""
+	await interaction.channel.send(text)
+	await interaction.response.send_message(f'Echoed',ephemeral=True)
+
 if __name__ == "__main__":
 	env = dotenv.dotenv_values()
 	client.run(env['TOKEN'])
