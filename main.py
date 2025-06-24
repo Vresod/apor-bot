@@ -61,7 +61,7 @@ async def on_message(message: discord.Message):
 	if message.author.id == 431978032094380043 and b <= 0.05:
 		await message.channel.send("SHUT THE FUCK UP I HATE YOU!! GOD")
 	# correct kav's grammar
-	if message.author.id == 793877493958311936 and "your" in message.content.lower():
+	if message.author.id == 793877493958311936 and "your" in message.content.lower() and b <= 0.33:
 		await message.channel.send("you're*")
 
 @client.tree.command()
