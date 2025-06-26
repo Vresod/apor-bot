@@ -50,19 +50,27 @@ async def on_message(message: discord.Message):
 	for prompt in call_and_response.prompts.items():
 		if re.match(prompt[0],message.content,flags=re.IGNORECASE + re.MULTILINE) and a <= prompt[1].chance:
 			await message.channel.send(prompt[1].response)
-			break
+			return
 
 	# use a different random variable to prevent monty hall problem
 	b = random.random()
 	# tell tristian to shut up
 	if message.author.id == 501528347591835648 and b <= 0.1:
 		await message.channel.send("lalalala I can't hear you")
+		return
 	# tell vresod to shut up
 	if message.author.id == 431978032094380043 and b <= 0.05:
 		await message.channel.send("SHUT THE FUCK UP I HATE YOU!! GOD")
+		return
 	# correct kav's grammar
 	if message.author.id == 793877493958311936 and "your" in message.content.lower() and b <= 0.33:
 		await message.channel.send("you're*")
+		return
+	# third different random variable
+	c = random.random()
+	if c <= 0.01:
+		await message.channel.send("AHH!!! HELP!!!!!!!!!! HELP ME!!!! IT'S UNBEARABLE PLEASE HELP!!!!!! AAAAGGGHHHHHHH")
+		return
 
 @client.tree.command()
 async def echo(interaction:discord.Interaction,text:str):
