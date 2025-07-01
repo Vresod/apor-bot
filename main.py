@@ -55,20 +55,20 @@ async def on_message(message: discord.Message):
 	# use a different random variable to prevent monty hall problem
 	b = random.random()
 	# tell tristian to shut up
-	if message.author.id == 501528347591835648 and b <= 0.1:
+	if message.author.id == 501528347591835648 and b <= 0.0667: # 1/15
 		await message.channel.send("lalalala I can't hear you")
 		return
 	# tell vresod to shut up
-	if message.author.id == 431978032094380043 and b <= 0.05:
+	if message.author.id == 431978032094380043 and b <= 0.03333: # 1/30
 		await message.channel.send("SHUT THE FUCK UP I HATE YOU!! GOD")
 		return
 	# correct kav's grammar
-	if message.author.id == 793877493958311936 and "your" in message.content.lower() and b <= 0.33:
+	if message.author.id == 793877493958311936 and "your" in message.content.lower() and b <= 0.41667: # 2/3
 		await message.channel.send("you're*")
 		return
 	# third different random variable
 	c = random.random()
-	if c <= 0.01:
+	if c <= 0.00667: # 1/150
 		await message.channel.send("AHH!!! HELP!!!!!!!!!! HELP ME!!!! IT'S UNBEARABLE PLEASE HELP!!!!!! AAAAGGGHHHHHHH")
 		return
 
