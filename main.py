@@ -12,6 +12,9 @@ import call_and_response
 
 # CONSTS
 MY_GUILD = discord.Object(id=1373444116700205178)
+STARBOARD_CHANNEL = discord.Object(id=1389822600124825600)
+PIN_EMOJIS = {"💀","⭐","📌"}
+
 class MyClient(discord.Client):
 	def __init__(self):
 		intents = discord.Intents.default()
@@ -38,6 +41,20 @@ class MyClient(discord.Client):
 client = MyClient()
 discord.utils.setup_logging(level=logging.DEBUG)
 debugging = hasattr(sys, 'gettrace') and sys.gettrace() is not None
+
+# directly copied and pasted from lunch table
+async def pin_message(message: discord.Message, starboard: discord.TextChannel):
+	embed = discord.Embed(
+		title=f"#{message.channel}",
+		description=message.content,
+		url=f"https://discord.com/channels/{message.guild.id}/{message.channel.id}"
+	)
+	embed.set_author(name=message.author.display_name, icon_url=str(message.author.avatar))
+	# embed.set_footer(text=f"[Jump]({message.jump_url})")
+	embed.add_field(name="Original Message:", value=f"[Jump]({message.jump_url})")
+	if len(message.attachments) > 0:
+		embed.set_image(url=message.attachments[0].url)
+	await starboard.send(embed=embed, content="", allowed_mentions=discord.AllowedMentions.none())
 
 @client.event
 async def on_ready():
@@ -71,6 +88,17 @@ async def on_message(message: discord.Message):
 	if c <= 0.00667: # 1/150
 		await message.channel.send("AHH!!! HELP!!!!!!!!!! HELP ME!!!! IT'S UNBEARABLE PLEASE HELP!!!!!! AAAAGGGHHHHHHH")
 		return
+
+@client.event
+async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
+	if payload.emoji.name not in PIN_EMOJIS:
+		return
+	message: discord.Message = await (client.get_channel(payload.channel_id).get_partial_message(payload.message_id)).fetch()
+	starboard: discord.TextChannel = client.get_channel(STARBOARD_CHANNEL.id)
+	for reaction in message.reactions:
+		if reaction.count != 2:
+			return
+	await pin_message(message, starboard)
 
 @client.tree.command()
 async def echo(interaction:discord.Interaction,text:str):
