@@ -63,29 +63,28 @@ async def on_ready():
 
 @client.event
 async def on_message(message: discord.Message):
-	a = random.random()
+	# because `and` only evaluates the second condition if the first one is falsy, it isn't actually an optimization
+	# to store a random variable and use it multiple times.
+	# it's better for readability, imo, to just call `random.random()` each time.
 	for prompt in call_and_response.prompts.items():
-		if re.match(prompt[0],message.content,flags=re.IGNORECASE + re.MULTILINE) and a <= prompt[1].chance:
+		if re.match(prompt[0],message.content,flags=re.IGNORECASE + re.MULTILINE) and random.random() <= prompt[1].chance:
 			await message.channel.send(prompt[1].response)
 			return
 
-	# use a different random variable to prevent monty hall problem
-	b = random.random()
 	# tell tristian to shut up
-	if message.author.id == 501528347591835648 and b <= 0.0667: # 1/15
+	if message.author.id == 501528347591835648 and random.random() <= 0.0667: # 1/15
 		await message.channel.send("lalalala I can't hear you")
 		return
 	# tell vresod to shut up
-	if message.author.id == 431978032094380043 and b <= 0.03333: # 1/30
+	if message.author.id == 431978032094380043 and random.random() <= 0.03333: # 1/30
 		await message.channel.send("SHUT THE FUCK UP I HATE YOU!! GOD")
 		return
 	# correct kav's grammar
-	if message.author.id == 793877493958311936 and "your" in message.content.lower() and b <= 0.41667: # 2/3
+	if message.author.id == 793877493958311936 and "your" in message.content.lower() and random.random() <= 0.41667: # 2/3
 		await message.channel.send("you're*")
 		return
-	# third different random variable
-	c = random.random()
-	if c <= 0.00667: # 1/150
+
+	if random.random() <= 0.00667: # 1/150
 		await message.channel.send("AHH!!! HELP!!!!!!!!!! HELP ME!!!! IT'S UNBEARABLE PLEASE HELP!!!!!! AAAAGGGHHHHHHH")
 		return
 
@@ -96,7 +95,7 @@ async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
 	message: discord.Message = await (client.get_channel(payload.channel_id).get_partial_message(payload.message_id)).fetch()
 	starboard: discord.TextChannel = client.get_channel(STARBOARD_CHANNEL.id)
 	for reaction in message.reactions:
-		if reaction.count != 2:
+		if reaction.count != 2 and reaction.emoji in PIN_EMOJIS:
 			return
 	await pin_message(message, starboard)
 
